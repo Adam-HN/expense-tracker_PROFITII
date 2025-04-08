@@ -88,7 +88,6 @@ const SignUp = () => {
                                 <input type="checkbox" className="rounded border-gray-300 text-primary focus:ring-primary" />
                                 <span className="ml-2 text-sm text-gray-600">Accept Terms</span>
                             </label>
-                            <Link to="/signin" className="text-sm text-primary hover:text-primary">Sign in instead</Link>
                         </div>
 
                         <button type='submit' className="btn-primary">

@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
-import AuthLayouts from '../../components/Layouts/AuthLayouts'
+import React, { useState } from 'react';
+import AuthLayouts from '../../components/Layouts/AuthLayouts';
 import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail } from '../../utils/helper';
-import Input from '../../components/Inputs/Input'
+import Input from '../../components/Inputs/Input';
+import axiosInstance from '../../utils/axiosInstance'; // Fixed typo: "Instancce" -> "Instance"
+import { API_PATHS } from '../../utils/ApiPaths';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -12,7 +14,8 @@ const Login = () => {
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevents default form submission
+        console.log("Form submitted:", { email, password }); // Debug: Should always log
 
         if (!validateEmail(email)) {
             setError("Invalid email address");
@@ -25,8 +28,28 @@ const Login = () => {
         }
 
         setError("");
-        //Login API call
-    }
+
+        try {
+            const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+                email,
+                password
+            });
+            console.log("Login response:", response.data); // Debug: Log successful response
+            const { token } = response.data;
+
+            if (token) {
+                localStorage.setItem('token', token);
+                navigate('/dashboard');
+            }
+        } catch (error) {
+            console.error("Login error:", error); // Debug: Log error details
+            if (error.response && error.response.data.message) {
+                setError(error.response.data.message); // e.g., "Invalid credentials"
+            } else {
+                setError("Something went wrong. Please try again");
+            }
+        }
+    };
 
     return (
         <AuthLayouts>
@@ -79,7 +102,7 @@ const Login = () => {
                 </div>
             </div>
         </AuthLayouts>
-    )
-}
+    );
+};
 
-export default Login
+export default Login;

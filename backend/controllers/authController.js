@@ -10,7 +10,7 @@ const generateToken = (id) => {
 exports.registerUser = async (req, res) => {
     const { fullName, email, password, profileImageUrl } = req.body;
 
-    console.log("registerUser called with:", req.body); // Add logging
+    
 
     // Validation: Check for missing fields
     if (!fullName || !email || !password) {
@@ -32,7 +32,7 @@ exports.registerUser = async (req, res) => {
             profileImageUrl
         });
         await user.save(); // Save to MongoDB
-        console.log("User saved to MongoDB:", user); // Confirm save
+        
 
         res.status(201).json({
             id: user._id,

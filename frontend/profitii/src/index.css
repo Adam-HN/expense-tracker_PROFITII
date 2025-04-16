@@ -8,7 +8,7 @@
 }
 
 @layer base {
-  htmml {
+  html {
     font-family: var(--font-display);
   }
 

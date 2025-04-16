@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react';
 import { LuUser, LuUpload, LuTrash } from 'react-icons/lu';
 
 const ProfilePhotoSelector = ({ image, setImage }) => {
@@ -12,16 +12,16 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
             const preview = URL.createObjectURL(file);
             setPreviewUrl(preview);
         }
-    }
+    };
 
     const handleRemoveImage = () => {
         setImage(null);
         setPreviewUrl(null);
-    }
+    };
 
     const onChangeFile = () => {
         inputRef.current.click();
-    }
+    };
 
     return (
         <div className='flex justify-center mb-6'>
@@ -32,7 +32,6 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
                 onChange={handleImageChange}
                 className='hidden'
             />
-
             {!image ? (
                 <div className='w-20 h-20 flex items-center justify-center bg-purple-100 rounded-full relative'>
                     <LuUser className='text-4xl text-primary' />
@@ -49,6 +48,7 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
                     <img
                         src={previewUrl}
                         alt="Profile"
+                        className='w-20 h-20 rounded-full object-cover' // Added styling
                     />
                     <button
                         type='button'
@@ -57,11 +57,10 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
                     >
                         <LuTrash />
                     </button>
-
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default ProfilePhotoSelector
+export default ProfilePhotoSelector;

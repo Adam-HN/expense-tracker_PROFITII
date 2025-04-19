@@ -18,32 +18,26 @@ axiosInstance.interceptors.request.use(
         }
         return config;
     },
-    (error) => {
-        return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
 );
 
 // Response Interceptor
 axiosInstance.interceptors.response.use(
-    (response) => {
-        return response;
-    },
+    (response) => response,
     (error) => {
-        // Handle common errors globally
         if (error.response) {
-            if (error.response.status === 401) {
-                // Redirect to login page
-                window.location.href = "/login";
-            } else if (error.response.status === 500) {
-                console.error("Server Error, Please try again later.");
+            const status = error.response.status;
+
+            if (status === 401) {
+                // Just reject - let the component handle it
+                console.warn("Unauthorized access (401) - handled by component.");
+            } else if (status === 500) {
+                console.error("Server error (500). Please try again later.");
             } else if (error.code === "ECONNABORTED") {
-                console.error("Request timeout, Please try again later.");
+                console.error("Request timeout. Please try again later.");
             }
-            return Promise.reject(error);
         }
-        if (error.response && error.response.status === 401) {
-            // Handle unauthorized access (e.g., redirect to login)
-        }
+
         return Promise.reject(error);
     }
 );

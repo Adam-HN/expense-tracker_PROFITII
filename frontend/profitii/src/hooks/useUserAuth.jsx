@@ -5,24 +5,24 @@ import axiosInstance from "../utils/axiosInstance";
 import { useContext, useEffect } from "react";
 
 export const useUserAuth = () => {
-    const {user, updateUser, clearUser} = useContext(UserContext);
+    const { user, updateUser, clearUser } = useContext(UserContext);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (user) return;
-        
+
         let isMounted = true;
 
         const fetchUserInfo = async () => {
             try {
                 const response = await axiosInstance.get(API_PATHS.AUTH.GET_USER_INFO)
 
-                if (isMounted && response.data){
+                if (isMounted && response.data) {
                     updateUser(response.data);
                 }
-            }catch (error) {
+            } catch (error) {
                 console.error("Failed to fetch user info", error);
-                if(isMounted){
+                if (isMounted) {
                     navigate("/login");
                 }
             }
@@ -32,5 +32,5 @@ export const useUserAuth = () => {
         return () => {
             isMounted = false;
         };
-    },   [updateUser, clearUser, navigate]);
+    }, [updateUser, clearUser, navigate]);
 };

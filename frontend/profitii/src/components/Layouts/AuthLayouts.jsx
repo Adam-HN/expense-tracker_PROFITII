@@ -9,7 +9,7 @@ const AuthLayouts = ({ children }) => {
                 {children}
             </div>
 
-            <div className='hidden md:block md:w-[40vw] bg-[#c7bbfe] bg-auth-bg-img bg-cover bg-no-repeat bg-center rounded-md m-2 p-4 sm:p-8 relative overflow-hidden'>
+            <div className='hidden md:block md:w-[40vw] bg-[#c7bbfe] bg-auth-bg-img bg-cover bg-no-repeat bg-center   p-4 sm:p-8 relative overflow-hidden'>
                 <div className='w-32 sm:w-48 h-32 sm:h-48 rounded-[40px] bg-purple-600 absolute -top-7 -left-5' />
                 <div className='w-32 sm:w-48 h-40 sm:h-56 rounded-[40px] border-[16px] sm:border-[20px] border-fuchsia-600 absolute top-[30%] -right-16 sm:-right-24' />
                 <div className='w-32 sm:w-48 h-32 sm:h-48 rounded-[40px] bg-violet-500 absolute -bottom-7 -left-5' />

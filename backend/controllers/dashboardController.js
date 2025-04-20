@@ -31,7 +31,7 @@ exports.getDashboardData = async (req, res) => {
 
         // Get expense transactions in the last 30 days
         const last30DaysExpenseTransactions = await Expense.find({
-            userId, // Correct for Expense
+            userId,
             date: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
         }).sort({ date: -1 });
 
@@ -42,7 +42,7 @@ exports.getDashboardData = async (req, res) => {
 
         // Fetch last 5 transactions (income + expense)
         const last5Transactions = [
-            ...(await Income.find({ UserId: userId }).sort({ date: -1 }).limit(5)).map( // Fixed: Capital U
+            ...(await Income.find({ UserId: userId }).sort({ date: -1 }).limit(5)).map(
                 (txn) => ({ ...txn.toObject(), type: "Income" })
             ),
             ...(await Expense.find({ userId }).sort({ date: -1 }).limit(5)).map(

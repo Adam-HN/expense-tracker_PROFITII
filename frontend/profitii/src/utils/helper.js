@@ -33,6 +33,5 @@ export const prepareExpenseBarChartData = (data = []) => {
     amount: item?.amount,
     date: item?.date.slice(0, 9),
   }));
-  console.log(chartData);
   return chartData;
 };

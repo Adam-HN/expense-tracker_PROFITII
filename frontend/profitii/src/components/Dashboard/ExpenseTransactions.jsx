@@ -1,4 +1,4 @@
-import TransactionInfoCard from '../../components/Cards/TransactionInfoCard'
+import TransactionInfoCard from '../Cards/TransactionInfoCard'
 import moment from 'moment'
 import React from 'react'
 import { LuArrowRight } from 'react-icons/lu'

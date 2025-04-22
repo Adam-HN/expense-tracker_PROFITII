@@ -18,7 +18,6 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        console.log("Form submitted:", { email, password });
 
         if (!validateEmail(email)) {
             setError("Invalid email address");

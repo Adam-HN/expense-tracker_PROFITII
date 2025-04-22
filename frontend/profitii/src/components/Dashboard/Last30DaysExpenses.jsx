@@ -1,4 +1,4 @@
-import CustomBarChart from '../../components/Charts/CustomBarChart';
+import CustomBarChart from '../Charts/CustomBarChart';
 import { prepareExpenseBarChartData } from '../../utils/helper';
 import React, { useEffect, useState } from 'react'
 

@@ -9,10 +9,12 @@ import InfoCard from '../../components/Cards/InfoCard';
 import { LuHandCoins, LuWalletMinimal } from 'react-icons/lu';
 import { IoMdCard } from 'react-icons/io';
 import { addThousandsSeparator } from "../../utils/helper";
-import RecentTransactions from './RecentTransactions';
-import FinanceOverview from '../../components/Cards/FinanceOverview';
-import ExpenseTransactions from './ExpenseTransactions';
-import Last30DaysExpenses from './Last30DaysExpenses';
+import RecentTransactions from '../../components/Dashboard/RecentTransactions';
+import FinanceOverview from '../../components/Dashboard/FinanceOverview';
+import ExpenseTransactions from '../../components/Dashboard/ExpenseTransactions';
+import Last30DaysExpenses from '../../components/Dashboard/Last30DaysExpenses';
+import RecentIncomeWithChart from '../../components/Dashboard/RecentIncomeWithChart';
+import RecentIncome from '../../components/Dashboard/RecentIncome';
 
 const Home = () => {
     useUserAuth();
@@ -91,8 +93,18 @@ const Home = () => {
                         onSeeMore={() => navigate("/expense")}
                     />
                     <Last30DaysExpenses
-                        data={dashboardData?.last30DaysExpenses.transactions || []}
+                        data={dashboardData?.last30DaysExpenses?.transactions || []}
 
+                    />
+
+                    <RecentIncomeWithChart
+                        data={dashboardData?.last60DaysIncomeTransactions?.transactions?.slice(0, 4) || []}
+                        totalIncome={dashboardData?.totalIncome || 0}
+                    />
+
+                    <RecentIncome
+                        transactions={dashboardData?.last60DaysIncomeTransactions?.transactions || []}
+                        onSeeMore={() => navigate("/income")}
                     />
                 </div>
             </div>

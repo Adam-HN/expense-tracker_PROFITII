@@ -15,6 +15,9 @@ import ExpenseTransactions from '../../components/Dashboard/ExpenseTransactions'
 import Last30DaysExpenses from '../../components/Dashboard/Last30DaysExpenses';
 import RecentIncomeWithChart from '../../components/Dashboard/RecentIncomeWithChart';
 import RecentIncome from '../../components/Dashboard/RecentIncome';
+import Modal from '../../components/Modal';
+import AddIncomeForm from '../../components/Income/AddIncomeForm';
+import toast from 'react-hot-toast';
 
 const Home = () => {
     useUserAuth();
@@ -23,6 +26,8 @@ const Home = () => {
 
     const [dashboardData, setDashboardData] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [openAddIncomeModal, setOpenAddIncomeModal] = useState(false);
+    const [incomeData, setIncomeData] = useState([]);
 
     const fetchDashboardData = async () => {
         if (loading) return;
@@ -41,6 +46,63 @@ const Home = () => {
             console.log("Something went wrong. Please try again.", error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    // Get All Income Details
+    const fetchIncomeDetails = async () => {
+        if (loading) return;
+
+        setLoading(true);
+
+        try {
+            const response = await axiosInstance.get(
+                `${API_PATHS.INCOME.GET_INCOMES}`
+            );
+
+            if (response.data) {
+                setIncomeData(response.data);
+            }
+        } catch (error) {
+            console.log("Something went wrong. Please try again.", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Handle Add Income
+    const handleAddIncome = async (income) => {
+        const { source, amount, date, icon } = income;
+
+        // Validation Checks
+        if (!source.trim()) {
+            toast.error("Source is required.");
+            return;
+        }
+
+        if (!amount || isNaN(amount) || Number(amount) <= 0) {
+            toast.error("Amount should be a valid number greater than 0.");
+            return;
+        }
+
+        if (!date) {
+            toast.error("Date is required.");
+            return;
+        }
+
+        try {
+            await axiosInstance.post(API_PATHS.INCOME.ADD_INCOME, {
+                source,
+                amount,
+                date,
+                icon,
+            });
+
+            setOpenAddIncomeModal(false);
+            toast.success("Income added successfully.");
+            fetchDashboardData();
+        } catch (error) {
+            console.error("Error adding income:", error.response?.data?.message || error.message);
         }
     };
 
@@ -108,6 +170,24 @@ const Home = () => {
                     />
                 </div>
             </div>
+
+            <button className='fixed bottom-0 right-0 m-4 bg-[#9670f7] rounded-full text-white text-2xl w-[50px] h-[50px] flex items-center justify-center'
+                onClick={() => setOpenAddIncomeModal(true)}
+            >
+                +
+            </button>
+
+            {openAddIncomeModal && (
+                <Modal
+                    isOpen={openAddIncomeModal}
+                    onClose={() => setOpenAddIncomeModal(false)}
+                    title="Add Income"
+                >
+                    <AddIncomeForm
+                        onAddIncomes={handleAddIncome}
+                    />
+                </Modal>
+            )}
         </DashboardLayout>
     )
 }

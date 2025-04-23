@@ -33,7 +33,7 @@ const Login = () => {
 
         try {
             const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, { email, password });
-            console.log("Login response:", response.data);
+
             const { token, user } = response.data;
 
             if (token) {

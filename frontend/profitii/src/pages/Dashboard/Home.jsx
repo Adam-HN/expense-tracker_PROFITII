@@ -109,7 +109,7 @@ const Home = () => {
     useEffect(() => {
         fetchDashboardData();
         return () => { };
-    }, []);
+    }, [dashboardData, incomeData]);
 
     return (
         <DashboardLayout activeMenu="Dashboard">
@@ -118,6 +118,7 @@ const Home = () => {
                     <InfoCard
                         icon={<IoMdCard />}
                         label="Total Balance"
+                        path="/"
                         value={addThousandsSeparator(dashboardData?.totalBalance || 0)}
                         color="bg-primary"
                         hoverColor="hover:bg-primary"
@@ -125,6 +126,7 @@ const Home = () => {
                     <InfoCard
                         icon={<LuWalletMinimal />}
                         label="Total Income"
+                        path="/income"
                         value={addThousandsSeparator(dashboardData?.totalIncome || 0)}
                         color="bg-orange-500"
                         hoverColor="hover:bg-orange-500"
@@ -132,6 +134,7 @@ const Home = () => {
                     <InfoCard
                         icon={<LuHandCoins />}
                         label="Total Expense"
+                        path="/expense"
                         value={addThousandsSeparator(dashboardData?.totalExpenses || 0)}
                         color="bg-red-500"
                         hoverColor="hover:bg-red-500"

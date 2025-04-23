@@ -1,10 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { LuImage, LuX } from 'react-icons/lu';
 
 const EmojiPickerPopup = ({ icon, onSelect }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const pickerRef = useRef(null);
 
-    const [isOpen, setIsOpen] = useState(false)
+    // Close picker when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (pickerRef.current && !pickerRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
 
     return (
         <div className='flex flex-col md:flex-row items-start gap-5 mb-6'>
@@ -24,8 +41,9 @@ const EmojiPickerPopup = ({ icon, onSelect }) => {
             </div>
 
             {isOpen && (
-                <div className='relative'>
-                    <button className='w-7 h-7 flex items-center justify-center bg-white border border-gray-200 rounded-full absolute -top-2 -right-2 z-10 cursor-pointer'
+                <div className='relative' ref={pickerRef}>
+                    <button
+                        className='w-7 h-7 flex items-center justify-center bg-white border border-gray-200 rounded-full absolute -top-2 -right-2 z-10 cursor-pointer'
                         onClick={() => setIsOpen(false)}
                     >
                         <LuX className='w-6 h-6' />
@@ -33,13 +51,15 @@ const EmojiPickerPopup = ({ icon, onSelect }) => {
 
                     <EmojiPicker
                         open={isOpen}
-                        onEmojiClick={(emoji) => onSelect(emoji?.imageUrl || "")}
+                        onEmojiClick={(emoji) => {
+                            onSelect(emoji?.imageUrl || "")
+                            setIsOpen(false);
+                        }}
                     />
                 </div>
             )}
-
         </div>
-    )
-}
+    );
+};
 
-export default EmojiPickerPopup
+export default EmojiPickerPopup;

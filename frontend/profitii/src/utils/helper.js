@@ -55,7 +55,7 @@ export const prepareExpenseLineChartData = (data = []) => {
 
   const chartData = sortedData.map((item) => ({
     month: moment(item?.date).format("Do MMM"),
-    date: item?.date.slice(0, 7),
+    date: item?.date.slice(0, 10),
     amount: item?.amount,
     category: item?.category,
   }));

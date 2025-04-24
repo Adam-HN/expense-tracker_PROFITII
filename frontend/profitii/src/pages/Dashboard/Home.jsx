@@ -17,6 +17,7 @@ import RecentIncome from '../../components/Dashboard/RecentIncome';
 import Modal from '../../components/Modal';
 import AddIncomeForm from '../../components/Income/AddIncomeForm';
 import toast from 'react-hot-toast';
+import AddExpenseForm from '../../components/Expense/AddExpenseForm';
 
 const Home = () => {
     useUserAuth();
@@ -25,8 +26,10 @@ const Home = () => {
     const [dashboardData, setDashboardData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [openAddIncomeModal, setOpenAddIncomeModal] = useState(false);
+    const [openAddExpenseModal, setOpenAddExpenseModal] = useState(false);
     const [incomeData, setIncomeData] = useState([]);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false); // New state for dropdown
+    const [expenseData, setExpenseData] = useState([]);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null); // Ref to handle clicks outside dropdown
 
     const fetchDashboardData = async () => {
@@ -90,6 +93,42 @@ const Home = () => {
         } catch (error) {
             console.error('Error adding income:', error.response?.data?.message || error.message);
             toast.error(error.response?.data?.message || 'Failed to add income.');
+        }
+    };
+
+    // Handle Add Expense
+    const handleAddExpense = async (expense) => {
+        const { category, amount, date, icon } = expense;
+
+        // Validation Checks
+        if (!category.trim()) {
+            toast.error("Category is required.");
+            return;
+        }
+
+        if (!amount || isNaN(amount) || Number(amount) <= 0) {
+            toast.error("Amount should be a valid number greater than 0.");
+            return;
+        }
+
+        if (!date) {
+            toast.error("Date is required.");
+            return;
+        }
+
+        try {
+            await axiosInstance.post(API_PATHS.EXPENSE.ADD_EXPENSE, {
+                category,
+                amount,
+                date,
+                icon,
+            });
+
+            setOpenAddExpenseModal(false);
+            toast.success("Expense added successfully.");
+            fetchExpenseDetails();
+        } catch (error) {
+            console.error("Error adding Expense:", error.response?.data?.message || error.message);
         }
     };
 
@@ -193,7 +232,7 @@ const Home = () => {
                                 className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                 onClick={() => {
                                     setIsDropdownOpen(false);
-                                    {/* Add setOpenAddExpenseModal */ }
+                                    setOpenAddExpenseModal(true);
                                 }}
                             >
                                 Add Expense
@@ -211,6 +250,16 @@ const Home = () => {
                     title="Add Income"
                 >
                     <AddIncomeForm onAddIncomes={handleAddIncome} />
+                </Modal>
+            )}
+            {/* Expense Modal */}
+            {openAddExpenseModal && (
+                <Modal
+                    isOpen={openAddExpenseModal}
+                    onClose={() => setOpenAddExpenseModal(false)}
+                    title="Add Expense"
+                >
+                    <AddExpenseForm onAddExpense={handleAddExpense} />
                 </Modal>
             )}
         </DashboardLayout>
